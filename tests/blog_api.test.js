@@ -54,6 +54,26 @@ describe("blogs management", () => {
 		expect(lastBlog).toEqual(newBlog);
 	});
 
+	test("if the likes property is missing, it defaults to 0", async () => {
+		const newBlog = {
+			title: "New test blog",
+			author: "Joaquín Soto",
+			url: "https://coolurl.com/",
+		};
+
+		await api
+			.post("/api/blogs")
+			.send(newBlog)
+			.expect(201)
+			.expect("Content-Type", /application\/json/);
+
+		const blogsAtEnd = await helper.blogsInDb();
+
+		const { likes } = blogsAtEnd[helper.initialBlogs.length];
+
+		expect(likes).toBe(0);
+	});
+
 	afterAll(() => {
 		mongoose.connection.close();
 	});
