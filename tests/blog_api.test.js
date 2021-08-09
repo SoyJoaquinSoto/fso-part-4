@@ -21,6 +21,14 @@ test("the list of blogs has the correct size and format", async () => {
 	expect(response.body).toHaveLength(helper.initialBlogs.length);
 });
 
+test("the unique identifier is defined as id", async () => {
+	const response = await api.get("/api/blogs");
+
+	response.body.forEach((blogPost) => {
+		expect(blogPost.id).toBeDefined();
+	});
+});
+
 afterAll(() => {
 	mongoose.connection.close();
 });
