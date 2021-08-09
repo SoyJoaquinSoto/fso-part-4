@@ -54,7 +54,7 @@ describe("blogs management", () => {
 		expect(lastBlog).toEqual(newBlog);
 	});
 
-	test("if the likes property is missing, it defaults to 0", async () => {
+	test("if the likes property is missing when creating a blog, it defaults to 0", async () => {
 		const newBlog = {
 			title: "New test blog",
 			author: "Joaquín Soto",
@@ -72,6 +72,15 @@ describe("blogs management", () => {
 		const { likes } = blogsAtEnd[helper.initialBlogs.length];
 
 		expect(likes).toBe(0);
+	});
+
+	test("if title and url missing when creating a blog, it returns a status of 400", async () => {
+		const newBlog = {
+			author: "Joaquín Soto",
+			likes: 3,
+		};
+
+		await api.post("/api/blogs").send(newBlog).expect(400);
 	});
 
 	afterAll(() => {

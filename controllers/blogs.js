@@ -14,6 +14,11 @@ blogsRouter.post("/", (request, response) => {
 		blog.likes = 0;
 	}
 
+	if (!blog.title && !blog.url) {
+		response.status(400).json("Must include the title and url!");
+		return;
+	}
+
 	blog.save().then((result) => {
 		response.status(201).json(result);
 	});
