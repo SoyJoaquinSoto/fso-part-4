@@ -24,4 +24,38 @@ blogsRouter.post("/", (request, response) => {
 	});
 });
 
+blogsRouter.delete("/:id", async (request, response) => {
+	try {
+		const result = await Blog.findByIdAndRemove(request.params.id);
+
+		if (!result) {
+			response.status(404).end();
+			return;
+		}
+
+		response.status(204).end();
+	} catch (err) {
+		response.status(400).end();
+	}
+});
+
+blogsRouter.put("/:id", async (request, response) => {
+	const newLikes = { likes: request.body.likes };
+	try {
+		const result = await Blog.findByIdAndUpdate(request.params.id, newLikes, {
+			new: true,
+			runValidators: true,
+		});
+
+		if (!result) {
+			response.status(404).end();
+			return;
+		}
+
+		response.json(result);
+	} catch (err) {
+		response.status(400).end();
+	}
+});
+
 module.exports = blogsRouter;
